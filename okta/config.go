@@ -25,6 +25,7 @@ import (
 	"syscall"
 
 	"github.com/okta/okta-sdk-golang/v2/okta/cache"
+	"gopkg.in/square/go-jose.v2"
 )
 
 type config struct {
@@ -58,9 +59,10 @@ type config struct {
 			DisableHttpsCheck bool `yaml:"disableHttpsCheck" envconfig:"OKTA_TESTING_DISABLE_HTTPS_CHECK"`
 		} `yaml:"testing"`
 	} `yaml:"okta"`
-	UserAgentExtra string
-	HttpClient     *http.Client
-	CacheManager   cache.Cache
+	UserAgentExtra   string
+	HttpClient       *http.Client
+	CacheManager     cache.Cache
+	PrivateKeySigner jose.Signer
 }
 
 type ConfigSetter func(*config)
@@ -217,4 +219,10 @@ func fileExists(filename string) bool {
 		return false
 	}
 	return !info.IsDir()
+}
+
+func WithPrivateKeySigner(signer jose.Signer) ConfigSetter {
+	return func(c *config) {
+		c.PrivateKeySigner = signer
+	}
 }
