@@ -14,7 +14,6 @@ import (
 )
 
 func (re *RequestExecutor) NewAuthTransport(next http.RoundTripper) (http.RoundTripper, error) {
-
 	switch re.config.Okta.Client.AuthorizationMode {
 
 	case "SSWS":
@@ -72,7 +71,6 @@ func (re *RequestExecutor) NewAuthTransport(next http.RoundTripper) (http.RoundT
 	default:
 		return nil, errors.New("unsupported authorization mode: " + re.config.Okta.Client.AuthorizationMode)
 	}
-
 }
 
 type httpAuthTransportSSWS struct {
@@ -101,7 +99,6 @@ type httpAuthTransportPrivateKey struct {
 }
 
 func (t *httpAuthTransportPrivateKey) RoundTrip(req *http.Request) (*http.Response, error) {
-
 	// Try using the cached access token if one exits. If Okta returns an Unauthorized error, retry
 	// the request after refreshing the token.
 	if t.re.cache.Has(AccessTokenCacheKey) {
@@ -119,11 +116,9 @@ func (t *httpAuthTransportPrivateKey) RoundTrip(req *http.Request) (*http.Respon
 
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 	return t.httpClient.Transport.RoundTrip(req)
-
 }
 
 func (t *httpAuthTransportPrivateKey) Refresh() (string, error) {
-
 	claims := ClientAssertionClaims{
 		Subject:  t.re.config.Okta.Client.ClientId,
 		IssuedAt: jwt.NewNumericDate(time.Now()),
@@ -175,5 +170,4 @@ func (t *httpAuthTransportPrivateKey) Refresh() (string, error) {
 	// Cache and return the access token.
 	t.re.cache.SetString(AccessTokenCacheKey, accessToken.AccessToken)
 	return accessToken.AccessToken, nil
-
 }

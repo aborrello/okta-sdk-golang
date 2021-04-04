@@ -38,7 +38,6 @@ func (re *RequestExecutor) NewBackoffTransport(next http.RoundTripper) (http.Rou
 }
 
 func (t *backoffTransport) RoundTrip(req *http.Request) (res *http.Response, err error) {
-
 	var body func() io.ReadCloser
 	if req.Body != nil {
 		data, err := ioutil.ReadAll(req.Body)
@@ -61,7 +60,6 @@ func (t *backoffTransport) RoundTrip(req *http.Request) (res *http.Response, err
 
 	policy := t.policy(ctx)
 	op := func() error {
-
 		if body != nil {
 			req.Body = body()
 		}
@@ -87,12 +85,10 @@ func (t *backoffTransport) RoundTrip(req *http.Request) (res *http.Response, err
 		req.Header.Add("X-Okta-Retry-For", res.Header.Get("X-Okta-Request-Id"))
 		req.Header.Add("X-Okta-Retry-Count", fmt.Sprint(policy.retryCount))
 		return errors.New("to many requests")
-
 	}
 
 	err = backoff.Retry(op, policy)
 	return
-
 }
 
 type backoffPolicy struct {
@@ -112,7 +108,6 @@ func (policy *backoffPolicy) NextBackOff() time.Duration {
 
 // SetNextBackOff defines the next backoff duration to be the time.Duration supplied.
 func (policy *backoffPolicy) SetNextBackOffFromRes(res *http.Response) error {
-
 	if res == nil {
 		return errors.New("no response to derive backoff time from")
 	}
@@ -134,7 +129,6 @@ func (policy *backoffPolicy) SetNextBackOffFromRes(res *http.Response) error {
 	}
 
 	return nil
-
 }
 
 // Context returns the context of the backoff policy to satiate the BackoffWithContext interface.

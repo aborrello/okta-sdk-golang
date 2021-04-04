@@ -25,7 +25,6 @@ type Response struct {
 }
 
 func (re *RequestExecutor) ParseResponse(res *http.Response) (*Response, error) {
-
 	if res == nil {
 		return nil, fmt.Errorf("must supply http response")
 	}
@@ -66,7 +65,6 @@ func (re *RequestExecutor) ParseResponse(res *http.Response) (*Response, error) 
 	}
 
 	return response, nil
-
 }
 
 func (resp *Response) GetBody() io.ReadCloser {
@@ -74,7 +72,6 @@ func (resp *Response) GetBody() io.ReadCloser {
 }
 
 func (resp *Response) UnmarshalBody(dest interface{}) error {
-
 	var err error
 	switch resp.Header.Get("Content-Type") {
 

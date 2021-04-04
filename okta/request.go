@@ -48,7 +48,6 @@ func (r *Request) RefreshNext() *Request {
 }
 
 func (r *Request) Build(baseURL *url.URL) (*http.Request, error) {
-
 	u, err := baseURL.Parse(r.path)
 	if err != nil {
 		return nil, fmt.Errorf("invalid uri: %w", err)
@@ -73,5 +72,4 @@ func (r *Request) Build(baseURL *url.URL) (*http.Request, error) {
 	}
 
 	return req, nil
-
 }

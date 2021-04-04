@@ -19,18 +19,15 @@ func (re *RequestExecutor) NewCacheTransport(next http.RoundTripper) (http.Round
 }
 
 func (t *cacheTransport) RoundTrip(r *http.Request) (*http.Response, error) {
-
 	switch r.Method {
 	case http.MethodGet:
 		return t.DoWithCache(r)
 	default:
 		return t.next.RoundTrip(r)
 	}
-
 }
 
 func (t *cacheTransport) DoWithCache(req *http.Request) (*http.Response, error) {
-
 	key := cache.CreateCacheKey(req)
 	if t.cache.Has(key) {
 		return t.cache.Get(key), nil
@@ -46,5 +43,4 @@ func (t *cacheTransport) DoWithCache(req *http.Request) (*http.Response, error) 
 	}
 
 	return res, nil
-
 }

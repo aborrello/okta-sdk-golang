@@ -17,11 +17,8 @@
 package okta
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -37,6 +34,7 @@ type RequestExecutor struct {
 	cache       cache.Cache
 	baseURL     *url.URL
 	baseHeaders http.Header
+	freshCache  bool
 }
 
 type RequestAccessToken struct {
@@ -94,37 +92,19 @@ func NewRequestExecutor(httpClient *http.Client, cache cache.Cache, config *conf
 	return &re, nil
 }
 
-func (re *RequestExecutor) NewRequestLegacy(method string, url string, body interface{}) (*http.Request, error) {
-	var buff io.ReadWriter
-	if body != nil {
-		buff = new(bytes.Buffer)
-		encoder := json.NewEncoder(buff)
-		encoder.SetEscapeHTML(false)
-		err := encoder.Encode(body)
-		if err != nil {
-			return nil, err
-		}
-	}
-	url = re.config.Okta.Client.OrgUrl + url
-
-	req, err := http.NewRequest(method, url, buff)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("User-Agent", NewUserAgent(re.config).String())
-
-	return req, nil
+func (re *RequestExecutor) RefreshNext() *RequestExecutor {
+	re.freshCache = true
+	return re
 }
 
 func (re *RequestExecutor) Do(ctx context.Context, req *Request, v interface{}) (*Response, error) {
-
 	r, err := req.Build(re.baseURL)
 	if err != nil {
 		return nil, err
 	}
 
-	if req.freshCache {
+	if req.freshCache || re.freshCache {
+		re.freshCache = false
 		re.cache.Delete(cache.CreateCacheKey(r))
 	}
 
@@ -143,5 +123,4 @@ func (re *RequestExecutor) Do(ctx context.Context, req *Request, v interface{}) 
 	}
 
 	return resp, nil
-
 }
