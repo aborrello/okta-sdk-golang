@@ -34,10 +34,7 @@ type LinkedObject struct {
 func (m *LinkedObjectResource) AddLinkedObjectDefinition(ctx context.Context, body LinkedObject) (*LinkedObject, *Response, error) {
 	url := fmt.Sprintf("/api/v1/meta/schemas/user/linkedObjects")
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("POST", url, body)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("POST", url, body).WithAccept("application/json").WithContentType("application/json")
 
 	var linkedObject *LinkedObject
 
@@ -52,10 +49,7 @@ func (m *LinkedObjectResource) AddLinkedObjectDefinition(ctx context.Context, bo
 func (m *LinkedObjectResource) GetLinkedObjectDefinition(ctx context.Context, linkedObjectName string) (*LinkedObject, *Response, error) {
 	url := fmt.Sprintf("/api/v1/meta/schemas/user/linkedObjects/%v", linkedObjectName)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("GET", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var linkedObject *LinkedObject
 
@@ -70,10 +64,7 @@ func (m *LinkedObjectResource) GetLinkedObjectDefinition(ctx context.Context, li
 func (m *LinkedObjectResource) DeleteLinkedObjectDefinition(ctx context.Context, linkedObjectName string) (*Response, error) {
 	url := fmt.Sprintf("/api/v1/meta/schemas/user/linkedObjects/%v", linkedObjectName)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("DELETE", url, nil)
-	if err != nil {
-		return nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("DELETE", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	resp, err := m.client.requestExecutor.Do(ctx, req, nil)
 	if err != nil {
@@ -86,10 +77,7 @@ func (m *LinkedObjectResource) DeleteLinkedObjectDefinition(ctx context.Context,
 func (m *LinkedObjectResource) ListLinkedObjectDefinitions(ctx context.Context) ([]*LinkedObject, *Response, error) {
 	url := fmt.Sprintf("/api/v1/meta/schemas/user/linkedObjects")
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("GET", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var linkedObject []*LinkedObject
 

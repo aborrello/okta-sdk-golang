@@ -11,21 +11,13 @@ func (m *{{modelName}}Resource) {{ucFirst operation.operationId}}({{operationArg
 
 	{{#if (ne operation.bodyModel undefined)}}
 	{{#if (eq operation.bodyFormat "binary")}}
-	req, err := m.client.requestExecutor.AsBinary().WithAccept("{{operation.produces.[0]}}").WithContentType("{{operation.consumes.[0]}}").NewRequest("{{strToUpper operation.method}}", url, body)
+	req := m.client.requestExecutor.NewRequest("{{strToUpper operation.method}}", url, body).AsBinary().WithAccept("{{operation.produces.[0]}}").WithContentType("{{operation.consumes.[0]}}")
 	{{else}}
-	req, err := m.client.requestExecutor.WithAccept("{{operation.produces.[0]}}").WithContentType("{{operation.consumes.[0]}}").NewRequest("{{strToUpper operation.method}}", url, body)
+	req := m.client.requestExecutor.NewRequest("{{strToUpper operation.method}}", url, body).WithAccept("{{operation.produces.[0]}}").WithContentType("{{operation.consumes.[0]}}")
 	{{/if}}
 	{{else}}
-	req, err := m.client.requestExecutor.WithAccept("{{operation.produces.[0]}}").WithContentType("{{operation.consumes.[0]}}").NewRequest("{{strToUpper operation.method}}", url, nil)
+	req := m.client.requestExecutor.NewRequest("{{strToUpper operation.method}}", url, nil).WithAccept("{{operation.produces.[0]}}").WithContentType("{{operation.consumes.[0]}}")
 	{{/if}}
-	if err != nil {
-		{{#if (ne operation.responseModel undefined)}}
-		return nil, nil, err
-		{{else}}
-		return nil, err
-		{{/if}}
-	}
-
 
 	{{#if (ne operation.responseModel undefined)}}
 	{{#if (ne operation.isArray undefined)}}

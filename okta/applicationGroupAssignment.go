@@ -47,10 +47,7 @@ func (a *ApplicationGroupAssignment) IsApplicationInstance() bool {
 func (m *ApplicationGroupAssignmentResource) DeleteApplicationGroupAssignment(ctx context.Context, appId string, groupId string) (*Response, error) {
 	url := fmt.Sprintf("/api/v1/apps/%v/groups/%v", appId, groupId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("DELETE", url, nil)
-	if err != nil {
-		return nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("DELETE", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	resp, err := m.client.requestExecutor.Do(ctx, req, nil)
 	if err != nil {

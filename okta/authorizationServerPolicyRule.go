@@ -43,10 +43,7 @@ type AuthorizationServerPolicyRule struct {
 func (m *AuthorizationServerPolicyRuleResource) UpdateAuthorizationServerPolicyRule(ctx context.Context, policyId string, authServerId string, ruleId string, body AuthorizationServerPolicyRule) (*AuthorizationServerPolicyRule, *Response, error) {
 	url := fmt.Sprintf("/api/v1/authorizationServers/%v/policies/%v/rules/%v", policyId, authServerId, ruleId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("PUT", url, body)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("PUT", url, body).WithAccept("application/json").WithContentType("application/json")
 
 	var authorizationServerPolicyRule *AuthorizationServerPolicyRule
 
@@ -62,10 +59,7 @@ func (m *AuthorizationServerPolicyRuleResource) UpdateAuthorizationServerPolicyR
 func (m *AuthorizationServerPolicyRuleResource) DeleteAuthorizationServerPolicyRule(ctx context.Context, policyId string, authServerId string, ruleId string) (*Response, error) {
 	url := fmt.Sprintf("/api/v1/authorizationServers/%v/policies/%v/rules/%v", policyId, authServerId, ruleId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("DELETE", url, nil)
-	if err != nil {
-		return nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("DELETE", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	resp, err := m.client.requestExecutor.Do(ctx, req, nil)
 	if err != nil {

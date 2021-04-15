@@ -96,9 +96,14 @@ func NewClient(ctx context.Context, conf ...ConfigSetter) (context.Context, *Cli
 		return nil, nil, err
 	}
 
+	requestExecutor, err := NewRequestExecutor(config.HttpClient, oktaCache, config)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	c := &Client{}
 	c.config = config
-	c.requestExecutor = NewRequestExecutor(config.HttpClient, oktaCache, config)
+	c.requestExecutor = requestExecutor
 
 	c.resource.client = c
 

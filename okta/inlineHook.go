@@ -43,10 +43,7 @@ type InlineHook struct {
 func (m *InlineHookResource) CreateInlineHook(ctx context.Context, body InlineHook) (*InlineHook, *Response, error) {
 	url := fmt.Sprintf("/api/v1/inlineHooks")
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("POST", url, body)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("POST", url, body).WithAccept("application/json").WithContentType("application/json")
 
 	var inlineHook *InlineHook
 
@@ -62,10 +59,7 @@ func (m *InlineHookResource) CreateInlineHook(ctx context.Context, body InlineHo
 func (m *InlineHookResource) GetInlineHook(ctx context.Context, inlineHookId string) (*InlineHook, *Response, error) {
 	url := fmt.Sprintf("/api/v1/inlineHooks/%v", inlineHookId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("GET", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var inlineHook *InlineHook
 
@@ -81,10 +75,7 @@ func (m *InlineHookResource) GetInlineHook(ctx context.Context, inlineHookId str
 func (m *InlineHookResource) UpdateInlineHook(ctx context.Context, inlineHookId string, body InlineHook) (*InlineHook, *Response, error) {
 	url := fmt.Sprintf("/api/v1/inlineHooks/%v", inlineHookId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("PUT", url, body)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("PUT", url, body).WithAccept("application/json").WithContentType("application/json")
 
 	var inlineHook *InlineHook
 
@@ -100,10 +91,7 @@ func (m *InlineHookResource) UpdateInlineHook(ctx context.Context, inlineHookId 
 func (m *InlineHookResource) DeleteInlineHook(ctx context.Context, inlineHookId string) (*Response, error) {
 	url := fmt.Sprintf("/api/v1/inlineHooks/%v", inlineHookId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("DELETE", url, nil)
-	if err != nil {
-		return nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("DELETE", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	resp, err := m.client.requestExecutor.Do(ctx, req, nil)
 	if err != nil {
@@ -119,10 +107,7 @@ func (m *InlineHookResource) ListInlineHooks(ctx context.Context, qp *query.Para
 		url = url + qp.String()
 	}
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("GET", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var inlineHook []*InlineHook
 
@@ -138,10 +123,7 @@ func (m *InlineHookResource) ListInlineHooks(ctx context.Context, qp *query.Para
 func (m *InlineHookResource) ExecuteInlineHook(ctx context.Context, inlineHookId string, body InlineHookPayload) (*InlineHookResponse, *Response, error) {
 	url := fmt.Sprintf("/api/v1/inlineHooks/%v/execute", inlineHookId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("POST", url, body)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("POST", url, body).WithAccept("application/json").WithContentType("application/json")
 
 	var inlineHookResponse *InlineHookResponse
 
@@ -157,10 +139,7 @@ func (m *InlineHookResource) ExecuteInlineHook(ctx context.Context, inlineHookId
 func (m *InlineHookResource) ActivateInlineHook(ctx context.Context, inlineHookId string) (*InlineHook, *Response, error) {
 	url := fmt.Sprintf("/api/v1/inlineHooks/%v/lifecycle/activate", inlineHookId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("POST", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("POST", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var inlineHook *InlineHook
 
@@ -176,10 +155,7 @@ func (m *InlineHookResource) ActivateInlineHook(ctx context.Context, inlineHookI
 func (m *InlineHookResource) DeactivateInlineHook(ctx context.Context, inlineHookId string) (*InlineHook, *Response, error) {
 	url := fmt.Sprintf("/api/v1/inlineHooks/%v/lifecycle/deactivate", inlineHookId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("POST", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("POST", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var inlineHook *InlineHook
 

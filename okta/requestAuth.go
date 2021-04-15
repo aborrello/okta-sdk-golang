@@ -80,7 +80,14 @@ type httpAuthTransportSSWS struct {
 
 func (t httpAuthTransportSSWS) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Header.Set("Authorization", "SSWS "+t.token)
-	return t.next.RoundTrip(req)
+	return t.transport().RoundTrip(req)
+}
+
+func (t httpAuthTransportSSWS) transport() http.RoundTripper {
+	if t.next != nil {
+		return t.next
+	}
+	return http.DefaultTransport
 }
 
 type ClientAssertionClaims struct {
@@ -98,12 +105,19 @@ type httpAuthTransportPrivateKey struct {
 	signer     jose.Signer
 }
 
+func (t httpAuthTransportPrivateKey) transport() http.RoundTripper {
+	if t.httpClient != nil && t.httpClient.Transport != nil {
+		return t.httpClient.Transport
+	}
+	return http.DefaultTransport
+}
+
 func (t *httpAuthTransportPrivateKey) RoundTrip(req *http.Request) (*http.Response, error) {
 	// Try using the cached access token if one exits. If Okta returns an Unauthorized error, retry
 	// the request after refreshing the token.
 	if t.re.cache.Has(AccessTokenCacheKey) {
 		req.Header.Set("Authorization", "Bearer "+t.re.cache.GetString(AccessTokenCacheKey))
-		res, err := t.httpClient.Transport.RoundTrip(req)
+		res, err := t.transport().RoundTrip(req)
 		if err != nil || res.StatusCode != http.StatusUnauthorized {
 			return res, err
 		}
@@ -115,7 +129,7 @@ func (t *httpAuthTransportPrivateKey) RoundTrip(req *http.Request) (*http.Respon
 	}
 
 	req.Header.Set("Authorization", "Bearer "+accessToken)
-	return t.httpClient.Transport.RoundTrip(req)
+	return t.transport().RoundTrip(req)
 }
 
 func (t *httpAuthTransportPrivateKey) Refresh() (string, error) {

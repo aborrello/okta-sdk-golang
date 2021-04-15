@@ -44,10 +44,7 @@ type Session struct {
 func (m *SessionResource) GetSession(ctx context.Context, sessionId string) (*Session, *Response, error) {
 	url := fmt.Sprintf("/api/v1/sessions/%v", sessionId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("GET", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var session *Session
 
@@ -63,10 +60,7 @@ func (m *SessionResource) GetSession(ctx context.Context, sessionId string) (*Se
 func (m *SessionResource) EndSession(ctx context.Context, sessionId string) (*Response, error) {
 	url := fmt.Sprintf("/api/v1/sessions/%v", sessionId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("DELETE", url, nil)
-	if err != nil {
-		return nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("DELETE", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	resp, err := m.client.requestExecutor.Do(ctx, req, nil)
 	if err != nil {
@@ -80,10 +74,7 @@ func (m *SessionResource) EndSession(ctx context.Context, sessionId string) (*Re
 func (m *SessionResource) CreateSession(ctx context.Context, body CreateSessionRequest) (*Session, *Response, error) {
 	url := fmt.Sprintf("/api/v1/sessions")
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("POST", url, body)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("POST", url, body).WithAccept("application/json").WithContentType("application/json")
 
 	var session *Session
 
@@ -99,10 +90,7 @@ func (m *SessionResource) CreateSession(ctx context.Context, body CreateSessionR
 func (m *SessionResource) RefreshSession(ctx context.Context, sessionId string) (*Session, *Response, error) {
 	url := fmt.Sprintf("/api/v1/sessions/%v/lifecycle/refresh", sessionId)
 
-	req, err := m.client.requestExecutor.WithAccept("application/json").WithContentType("application/json").NewRequest("POST", url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
+	req := m.client.requestExecutor.NewRequest("POST", url, nil).WithAccept("application/json").WithContentType("application/json")
 
 	var session *Session
 

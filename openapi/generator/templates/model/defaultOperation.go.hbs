@@ -4,18 +4,9 @@ func (c *Client) {{ucFirst operation.operationId}}({{operationArgumentBuilder op
 		url = url + qp.String()
 	}
 	{{#if (ne operation.bodyModel undefined)}}
-	req, err := c.requestExecutor.NewRequest("{{strToUpper operation.method}}", url, body)
+	req := c.requestExecutor.NewRequest("{{strToUpper operation.method}}", url, body)
 	{{else}}
-	req, err := c.requestExecutor.NewRequest("{{strToUpper operation.method}}", url, nil)
-	{{/if}}
-	{{#if (ne operation.responseModel undefined)}}
-	if err != nil {
-		return nil, nil, err
-	}
-	{{else}}
-	if err != nil {
-		return nil, err
-	}
+	req := c.requestExecutor.NewRequest("{{strToUpper operation.method}}", url, nil)
 	{{/if}}
 
 
